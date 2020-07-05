@@ -31,9 +31,9 @@ namespace MRecon.Forms
         DbModel db = new DbModel();
         public Registration()
         {
-            InitializeComponent(); 
-            string SystemName=System.Net.Dns.GetHostName();
-            string MacAddress=GetMachineData("MACAddress");
+            InitializeComponent();
+            string SystemName = System.Net.Dns.GetHostName();
+            string MacAddress = GetMachineData("MACAddress");
             var dd = db.RegistrationMasters.Where(x => x.SystemName == SystemName && x.MacAddress == MacAddress).FirstOrDefault();
             if (dd != null)
             {
@@ -66,7 +66,7 @@ namespace MRecon.Forms
             string Value = Utility.Utility.Encrypt(_Reg.Name + "|" + _Reg.MobileNo + "|" + _Reg.EmailID + "|" + _Reg.Key + "|" + _Reg.MacAddress + "|" + _Reg.SystemName);
             var curDir = Directory.GetCurrentDirectory();
             var curPath = curDir + "\\lic.txt";
-            var exsitpath = curPath.Replace(".txt",".rec");
+            var exsitpath = curPath.Replace(".txt", ".rec");
             if (File.Exists(exsitpath))
             {
                 File.Delete(exsitpath);
@@ -75,7 +75,25 @@ namespace MRecon.Forms
             txt.Write(Value);
             txt.Close();
             File.Move(curPath, System.IO.Path.ChangeExtension(curPath, ".rec"));
-            Process.Start("mailto:santysan143@gmail.com?Subject=hello&Attach=" + curDir );
+
+            //          var proc = new System.Diagnostics.Process();
+
+            //proc.StartInfo.FileName = string.Format("\"{0}\"", Process.GetProcessesByName("OUTLOOK")[0]);
+
+            //proc.StartInfo.Arguments = string.Format(" /c ipm.note /m {0} /a \"{1}\"", "santysan143@gmail.com", curDir);
+
+            //proc.Start();
+
+            string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attachments={3}", "santysan143@gmail.com", "License Activation", "Please activate my licence with following key : " + Value + " .", curDir);
+            url.NavigateUri = new Uri(mailto);
+            //mailto = Uri.EscapeUriString(mailto);
+            ////System.Diagnostics.Process.Start(mailto);
+
+            //Process pro = new Process();
+            //pro.StartInfo.UseShellExecute = true;
+            //pro.StartInfo.RedirectStandardOutput = false;
+           // pro.ProcessName = mailto;
+             Process.Start("mailto:santysan143@gmail.com?Subject=hello&Attachment=\"" + curDir + "\"");
 
         }
 
