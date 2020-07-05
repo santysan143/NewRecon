@@ -1,0 +1,74 @@
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\MRecon.exe.config
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\Database\MyDB.mdf
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\Database\MyDB_log.ldf
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\MyDB.mdf
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\MyDB_log.ldf
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\EntityFramework.dll
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\EntityFramework.SqlServer.dll
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\EntityFramework.xml
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\EntityFramework.SqlServer.xml
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon.csprojResolveAssemblyReference.cache
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MainWindow.baml
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MainWindow.g.cs
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\App.g.cs
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon_Content.g.cs
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon_MarkupCompile.cache
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon.g.resources
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon.Properties.Resources.resources
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon.csproj.GenerateResource.Cache
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon.exe
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon.pdb
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\MRecon.exe
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\bin\Debug\MRecon.pdb
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\MRecon.Migrations.Mig1.resources
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\Forms\Registration.baml
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\Forms\Registration.g.cs
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\Forms\Activation.baml
+c:\users\lenovo\documents\visual studio 2013\Projects\MRecon\MRecon\obj\Debug\Forms\Activation.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\MRecon.exe
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\EntityFramework.dll
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\EntityFramework.SqlServer.dll
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\Database\MyDB.mdf
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\Database\MyDB_log.ldf
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\MyDB.mdf
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\MyDB_log.ldf
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\MRecon.exe.config
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\MRecon.pdb
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\Utility.dll
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\Utility.pdb
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\EntityFramework.xml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\bin\Debug\EntityFramework.SqlServer.xml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon.csprojResolveAssemblyReference.cache
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\Activation.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\Registration.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MainWindow.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\Activation.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\Registration.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MainWindow.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\App.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon_Content.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon_MarkupCompile.cache
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon.g.resources
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon.Migrations.mig1.resources
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon.Properties.Resources.resources
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon.csproj.GenerateResource.Cache
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon.exe
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\MRecon.pdb
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\AdhaarCard.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\CreateRole.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\CreateUser.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\CreditCard.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\MobileNo.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\PanCard.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\ReviewScan.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\RoleMapping.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\UserMapping.baml
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\AdhaarCard.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\CreateRole.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\CreateUser.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\CreditCard.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\MobileNo.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\PanCard.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\ReviewScan.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\RoleMapping.g.cs
+I:\Santosh Personal\MYGIT\Recon\MRecon\MRecon\obj\Debug\Forms\UserMapping.g.cs

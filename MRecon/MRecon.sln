@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRecon", "MRecon\MRecon.csproj", "{F4704C49-2E5D-482A-AF68-3C76308763F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{AC522D34-C5A5-4485-9E77-FFACEBEF1B18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4704C49-2E5D-482A-AF68-3C76308763F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4704C49-2E5D-482A-AF68-3C76308763F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4704C49-2E5D-482A-AF68-3C76308763F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4704C49-2E5D-482A-AF68-3C76308763F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC522D34-C5A5-4485-9E77-FFACEBEF1B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC522D34-C5A5-4485-9E77-FFACEBEF1B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC522D34-C5A5-4485-9E77-FFACEBEF1B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC522D34-C5A5-4485-9E77-FFACEBEF1B18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
