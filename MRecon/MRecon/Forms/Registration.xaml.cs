@@ -29,95 +29,109 @@ namespace MRecon.Forms
     public partial class Registration : Page
     {
         DbModel db = new DbModel();
+        Int64 PageLogID;
         public Registration()
         {
-            InitializeComponent();
-            string SystemName = System.Net.Dns.GetHostName();
-            string MacAddress = GetMachineData("MACAddress");
-            var dd = db.RegistrationMasters.Where(x => x.SystemName == SystemName && x.MacAddress == MacAddress).FirstOrDefault();
-            if (dd != null)
+            InitializeComponent();            
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
             {
-                SendRegistrationMail(dd);
+                //Page Logger
+                PageLogID = AppUtility.PageLogger(1, 1);
+                // Page Event Logger
+                AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Form Load", "Normal");
+                //Initiliazing Frame
+
+                //Getting System Info
+                string SystemName = System.Net.Dns.GetHostName();
+                string MacAddress = AppUtility.GetMachineData("MACAddress");
+                //Validating Data
+                var items = db.RegistrationMasters.Where(x => x.SystemName == SystemName && x.MacAddress == MacAddress).ToList();
+                string PageName = "Forms/Login.xaml";
+                foreach (var dd in items)
+                {
+                    if (dd.IsActivated == true && dd.IsSentForRegistration == true)
+                    {
+                        // Page Event Logger
+                        AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Sent To Login Page", "Normal");                        
+                        break;
+                    }
+                    else if (dd.IsActivated == false && dd.IsSentForRegistration == true)
+                    {
+                        PageName = "Forms/Activation.xaml";
+                        // Page Event Logger
+                        AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Mail Process Triggerred Again", "Normal");
+                        AppUtility.SendRegistrationMail(dd);
+                        MessageBox.Show("Please send mail again for activation key.");
+                        Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
+                        MainFrame.Navigate(new System.Uri(PageName, UriKind.RelativeOrAbsolute));
+                        break;
+                    }
+                }
+                
+                // Page Event Logger
+                AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Form Load END", "Normal");
+            }
+            catch (Exception ex)
+            {
+                // Page Event Logger
+                AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, ex.Message + " | " + ex.StackTrace, "Error");
+                MessageBox.Show("There is some error, Please contact administrator.");
             }
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            RegistrationMaster _Reg = new RegistrationMaster();
-            _Reg.CreatedBy = 1;
-            _Reg.CreatedDtTm = DateTime.Now;
-            _Reg.EmailID = txtEmailID.Text;
-            _Reg.IsActive = true;
-            _Reg.Key = Guid.NewGuid().ToString();
-            _Reg.SystemName = System.Net.Dns.GetHostName();
-            _Reg.MacAddress = GetMachineData("MACAddress");
-            _Reg.Name = txtFullName.Text;
-            _Reg.MobileNo = txtMobileNumber.Text;
-            db.RegistrationMasters.Add(_Reg);
-            db.SaveChanges();
-            if (_Reg.RegistrationID > 0)
+            try
             {
-                SendRegistrationMail(_Reg);
-            }
-        }
-
-        private void SendRegistrationMail(RegistrationMaster _Reg)
-        {
-            string Value = Utility.Utility.Encrypt(_Reg.Name + "|" + _Reg.MobileNo + "|" + _Reg.EmailID + "|" + _Reg.Key + "|" + _Reg.MacAddress + "|" + _Reg.SystemName);
-            var curDir = Directory.GetCurrentDirectory();
-            var curPath = curDir + "\\lic.txt";
-            var exsitpath = curPath.Replace(".txt", ".rec");
-            if (File.Exists(exsitpath))
-            {
-                File.Delete(exsitpath);
-            }
-            TextWriter txt = new StreamWriter(curPath);
-            txt.Write(Value);
-            txt.Close();
-            File.Move(curPath, System.IO.Path.ChangeExtension(curPath, ".rec"));
-
-            //          var proc = new System.Diagnostics.Process();
-
-            //proc.StartInfo.FileName = string.Format("\"{0}\"", Process.GetProcessesByName("OUTLOOK")[0]);
-
-            //proc.StartInfo.Arguments = string.Format(" /c ipm.note /m {0} /a \"{1}\"", "santysan143@gmail.com", curDir);
-
-            //proc.Start();
-
-            string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attachments={3}", "santysan143@gmail.com", "License Activation", "Please activate my licence with following key : " + Value + " .", curDir);
-            url.NavigateUri = new Uri(mailto);
-            //mailto = Uri.EscapeUriString(mailto);
-            ////System.Diagnostics.Process.Start(mailto);
-
-            //Process pro = new Process();
-            //pro.StartInfo.UseShellExecute = true;
-            //pro.StartInfo.RedirectStandardOutput = false;
-           // pro.ProcessName = mailto;
-             Process.Start("mailto:santysan143@gmail.com?Subject=hello&Attachment=\"" + curDir + "\"");
-
-        }
-
-        public string GetMachineData(string Address)
-        {
-            ManagementClass MC = new ManagementClass("Win32_NetworkAdapter");
-            ManagementObjectCollection MOCol = MC.GetInstances();
-            string _address = "";
-            foreach (ManagementObject MO in MOCol)
-            {
-                if (MO != null)
+                // Page Event Logger
+                AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, "Registration Button Click Started", "Normal");
+                RegistrationMaster _Reg = new RegistrationMaster();
+                _Reg.CreatedBy = 1;
+                _Reg.CreatedDtTm = DateTime.Now;
+                _Reg.EmailID = txtEmailID.Text;
+                _Reg.IsActive = true;
+                _Reg.Key = Guid.NewGuid().ToString();
+                _Reg.SystemName = System.Net.Dns.GetHostName();
+                _Reg.MacAddress = AppUtility.GetMachineData("MACAddress");
+                _Reg.Name = txtFullName.Text;
+                _Reg.MobileNo = txtMobileNumber.Text;
+                _Reg.IsSentForRegistration = true;
+                db.RegistrationMasters.Add(_Reg);
+                db.SaveChanges();
+                // Page Event Logger
+                AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, "Registration Done", "Normal");
+                if (_Reg.RegistrationID > 0)
                 {
-                    if (MO[Address] != null)
-                    {
-                        _address = MO[Address].ToString();
-                        if (_address != string.Empty)
-                            break;
-                    }
+                    // Page Event Logger
+                    AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, "Mailig Process Started", "Normal");
+                    AppUtility.SendRegistrationMail(_Reg);
                 }
+
+                MessageBox.Show("Please send the mail.");
+                Frame MainFrame1 = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
+                MainFrame1.Navigate(new System.Uri("Forms/Activation.xaml", UriKind.RelativeOrAbsolute));
+                // Page Event Logger
+                AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, "Registration Button Click END", "Normal");
             }
-            return _address;
-
-
+            catch (Exception ex)
+            {
+                // Page Event Logger
+                AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, ex.Message + " | " + ex.StackTrace, "Error");
+                MessageBox.Show("There is some error, Please contact administrator.");
+            }
         }
 
+       
+
+        
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            AppUtility.UpdatePageLogger(PageLogID);
+        }
     }
 }

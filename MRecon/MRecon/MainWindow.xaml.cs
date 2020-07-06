@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MRecon.Database;
+using MRecon.Forms;
+using MRecon.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +23,46 @@ namespace MRecon
     /// </summary>
     public partial class MainWindow : Window
     {
+        DbModel db = new DbModel();
+        Int64 PageLogID;
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Cursor = Cursors.Wait;
+            //Page Logger
+            PageLogID = AppUtility.PageLogger(0, 1);
+            // Page Event Logger
+            AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Form Load", "Normal");
+
+            string SystemName = System.Net.Dns.GetHostName();
+            string MacAddress = AppUtility.GetMachineData("MACAddress");
+            //Initiliazing Frame
+            var items = db.RegistrationMasters.Where(x => x.SystemName == SystemName).ToList();
+            foreach (var dd in items)
+            {
+                if (dd.IsActivated == true && dd.IsSentForRegistration == true)
+                {
+                    // Page Event Logger
+                    AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Sent To Login Page", "Normal");
+                    LoginWindow frm = new LoginWindow();
+                    this.Cursor = Cursors.Arrow;
+                    frm.Show();
+                    this.Close();
+                    break;
+                }
+                else if (dd.IsActivated == false && dd.IsSentForRegistration == true)
+                {
+                    RegistrationMenu.Visibility = Visibility.Collapsed;
+                    ActivationMenu.Visibility = Visibility.Visible;
+                    break;
+                }
+            }
+            this.Cursor = Cursors.Arrow;
+        }
         private void RegistrationMenu_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new System.Uri("Forms/Registration.xaml",
@@ -90,5 +128,7 @@ namespace MRecon
             MainFrame.Navigate(new System.Uri("Forms/ReviewScan.xaml",
                          UriKind.RelativeOrAbsolute));
         }
+
+
     }
 }

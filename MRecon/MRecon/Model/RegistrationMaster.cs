@@ -20,6 +20,9 @@ namespace MRecon.Model
         public bool IsSentForRegistration { get; set; }
         public string ActivationKey { get; set; }
         public bool IsActivated { get; set; }
+        public string ActivatedBy { get; set; }
+        public DateTime? ActivatedDtTm { get; set; }
+        public DateTime? ActivatedTillDtTm { get; set; }
         public bool IsActive { get; set; }
         public string Remarks { get; set; }
         public Int64? CreatedBy { get; set; }

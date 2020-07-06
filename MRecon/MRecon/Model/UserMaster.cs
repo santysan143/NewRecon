@@ -26,10 +26,8 @@ namespace MRecon.Model
         public string EmailID { get; set; }
         [Required]
         public Int64 RoleID { get; set; }
-        [Required]
-        public Int64 ClientID { get; set; }
-        [Required]
-        public Int64 ManagerID { get; set; }
+        public Int64? ClientID { get; set; }
+        public Int64? ManagerID { get; set; }
         public bool IsActive { get; set; }
         public string Remarks { get; set; }
         public Int64? CreatedBy { get; set; }
