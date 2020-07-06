@@ -1,0 +1,43 @@
+﻿<Page x:Class="MasterRecon.Forms.Registration"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignWidth="900"
+	Title="Registration" Loaded="Page_Loaded" Unloaded="Page_Unloaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Activation Key</Label>
+        <TextBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="5" x:Name="txtActivationKey"></TextBox>
+        <Button x:Name="btnValidate" Grid.Row="2" Grid.ColumnSpan="4" Width="150" Content="Validate Key" Margin="0,5" Click="btnValidate_Click"></Button>
+        <Separator Grid.Row="3" Grid.ColumnSpan="4"></Separator>
+        <Label Grid.Row="4" VerticalAlignment="Center" x:Name="lblFullName" Visibility="Collapsed">Full Name</Label>
+        <TextBox x:Name="txtFullName" Visibility="Collapsed" VerticalAlignment="Center"></TextBox>
+        <Label Grid.Row="4" Grid.Column="2" x:Name="lblMobileName" VerticalAlignment="Center" Visibility="Collapsed">Mobile No</Label>
+        <TextBox x:Name="txtMobileNo" Visibility="Collapsed" VerticalAlignment="Center"></TextBox>
+        <Label Grid.Row="5" Grid.Column="0" x:Name="lblEmailID" VerticalAlignment="Center" Visibility="Collapsed">Email-ID</Label>
+        <TextBox Grid.Row="5" Grid.Column="1" x:Name="txtEmailID" VerticalAlignment="Center" Visibility="Collapsed"></TextBox>
+        <Label Grid.Row="5" Grid.Column="2" x:Name="lblValidityDate" VerticalAlignment="Center" Visibility="Collapsed">Valid Upto</Label>
+        <DatePicker Grid.Row="5" Grid.Column="3" x:Name="txtValidUpto" Margin="5" Visibility="Collapsed"></DatePicker>
+        <Button x:Name="btnActivate" Grid.Row="6" Grid.ColumnSpan="4" Width="150" Content="Activate" Margin="0,5" Click="btnActivate_Click" Visibility="Collapsed"></Button>
+    </Grid>
+</Page>
