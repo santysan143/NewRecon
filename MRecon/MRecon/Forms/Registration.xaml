@@ -3,20 +3,23 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" Width="800" Title="Registration" Loaded="Page_Loaded" Unloaded="Page_Unloaded">
+      mc:Ignorable="d" Height="320" Width="800" Title="Registration" Loaded="Page_Loaded" Unloaded="Page_Unloaded">
 
     <StackPanel  Orientation="Vertical" >
         <StackPanel Width="800" Height="30" Background="LightBlue">
             <TextBlock FontSize="18" Foreground="White" Margin="4">Registration</TextBlock>
         </StackPanel>
         <Separator></Separator>
-        <Grid Width="750" HorizontalAlignment="Center">
+        <Grid Width="750" HorizontalAlignment="Center" x:Name="RegistrationGrid">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -27,10 +30,25 @@
             <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Full Name</Label>
             <Label Grid.Row="1" Grid.Column="2" VerticalAlignment="Center">Mobile Number</Label>
             <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Email-ID</Label>
+            <Label Grid.Row="2" Grid.Column="2" VerticalAlignment="Center">Company Name</Label>
+            <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Services</Label>
+            <Label Grid.Row="3" Grid.Column="2" VerticalAlignment="Center">License Count</Label>
             <TextBox Grid.Row="1" Grid.Column="1" Margin="5" x:Name="txtFullName"></TextBox>
             <TextBox Grid.Row="1" Grid.Column="3" Margin="5" x:Name="txtMobileNumber"></TextBox>
             <TextBox Grid.Row="2" Grid.Column="1" Margin="5" x:Name="txtEmailID"></TextBox>
-            <Button x:Name="btnSubmit" Grid.Row="3" Grid.ColumnSpan="4" Width="150" Content="Register" Margin="0,5" Click="btnSubmit_Click"></Button>
+            <TextBox Grid.Row="2" Grid.Column="3" Margin="5" x:Name="txtCompanyName"></TextBox>
+            <StackPanel Grid.Row="3" Grid.Column="1" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5" Orientation="Vertical">
+                <ListBox Name="listBoxSeachType" ItemsSource="{Binding SearchTypeList}" Height="110"   Background="White">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Name="CheckBoxZone" IsChecked="{Binding Path=IsRequired, Mode=TwoWay}" Content="{Binding ServiceName}" Tag="{Binding ServiceID}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Margin="0,5,0,0"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+            <TextBox Grid.Row="3" Grid.Column="3" Margin="5" x:Name="txtLicenseCount"></TextBox>
+            <Button x:Name="btnSubmit" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Right"  Width="150" Content="Register" Margin="0,5,10,5" Click="btnSubmit_Click"></Button>
+            <Button x:Name="btnActivate" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" Grid.ColumnSpan="2" Width="150" Content="Activate" Margin="10,5,0,5" Click="btnActivate_Click"></Button>
         </Grid>
     </StackPanel>
 </Page>

@@ -14,15 +14,18 @@ namespace MRecon.Model
         public string Name { get; set; }
         public string MobileNo { get; set; }
         public string EmailID { get; set; }
+        public string CompanyName { get; set; }
         public string MacAddress { get; set; }
         public string SystemName { get; set; }
         public string Key { get; set; }
         public bool IsSentForRegistration { get; set; }
         public string ActivationKey { get; set; }
-        public bool IsActivated { get; set; }
+        public bool? IsActivated { get; set; }
         public string ActivatedBy { get; set; }
         public DateTime? ActivatedDtTm { get; set; }
         public DateTime? ActivatedTillDtTm { get; set; }
+        public int LicenseCount { get; set; }
+        public int LicenseUsed { get; set; }
         public bool IsActive { get; set; }
         public string Remarks { get; set; }
         public Int64? CreatedBy { get; set; }

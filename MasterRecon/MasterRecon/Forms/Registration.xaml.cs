@@ -1,5 +1,6 @@
 ﻿using MasterRecon.Database;
 using MasterRecon.Model;
+using MasterRecon.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,6 +27,8 @@ namespace MasterRecon.Forms
     {
         RegistrationMaster _Reg;
         DbModel db = new DbModel();
+        List<Service> SearchTypeList;
+        LicenseViewModel licvm;
         public Registration()
         {
             InitializeComponent();
@@ -33,43 +36,45 @@ namespace MasterRecon.Forms
 
         private void btnValidate_Click(object sender, RoutedEventArgs e)
         {
-
-            string value = Utility.Utility.Decrypt(txtActivationKey.Text);
-            string[] infos = value.Split('|');
-            string SystemName = infos[5]; string MacAddress = infos[4]; string MobileNo = infos[1]; string EmailID = infos[2]; string Name = infos[0]; string _Key = infos[3];
-            var _ExistReg = db.RegistrationMasters.Where(w => w.Key == _Key && w.SystemName == SystemName && w.MacAddress == MacAddress && w.MobileNo == MobileNo && w.EmailID == EmailID && w.Name == Name).FirstOrDefault();
+            txtActivationKey.SelectAll();
+            string value = Utility.Utility.Decrypt(txtActivationKey.Selection.Text);
+            licvm = Newtonsoft.Json.JsonConvert.DeserializeObject<LicenseViewModel>(value);
+            var _ExistReg = db.RegistrationMasters.Where(w => w.Key == licvm.Key && w.SystemName == licvm.SystemName && w.MacAddress == licvm.MacAddress && w.MobileNo == licvm.MobileNo && w.EmailID == licvm.EmailID && w.Name == licvm.Name).FirstOrDefault();
             if (_ExistReg != null)
             {
                 if (_ExistReg.IsActivated)
                 {
+                    licvm.ServiceList = new List<Service>();
+                    licvm.ServiceList.AddRange(db.RegistrationWiseSearchTypes.Join(db.SearchTypeMasters, x => x.SearchTypeID, y => y.SearchTypeID, (x, y) => new { x, y.SearchName }).Where(w => w.x.RegistrationID == _ExistReg.RegistrationID).Select(s => new Service() { ServiceID = s.x.SearchTypeID, IsRequired = s.x.IsRequired, IsActivated = s.x.IsActivated, ServiceName = s.SearchName }).ToList());
+                    licvm.IsActivated = _ExistReg.IsActivated;
+                    licvm.ActivationDtTm = _ExistReg.ActivatedDtTm;
+                    licvm.ActivationKey = _ExistReg.ActivationKey;
+                    licvm.ActivationUptoDtTm = _ExistReg.ActivatedTillDtTm;
                     MessageBox.Show("Same key has been already activated.");
-                    MailData(_ExistReg);
+                    MailData(licvm, _ExistReg.RegistrationID);
                 }
             }
             else
             {
-                if (infos.Count() == 6)
+                if (licvm != null)
                 {
-                    txtFullName.Text = Name;
-                    txtMobileNo.Text = MobileNo;
-                    txtEmailID.Text = EmailID;
-                    lblFullName.Visibility = Visibility.Visible;
-                    lblEmailID.Visibility = Visibility.Visible;
-                    lblMobileName.Visibility = Visibility.Visible;
-                    txtEmailID.Visibility = Visibility.Visible;
-                    txtFullName.Visibility = Visibility.Visible;
-                    txtMobileNo.Visibility = Visibility.Visible;
-                    btnActivate.Visibility = Visibility.Visible;
-                    txtValidUpto.Visibility = Visibility.Visible;
+                    listBoxSeachType.ItemsSource = licvm.ServiceList;
+                    txtFullName.Text = licvm.Name;
+                    txtMobileNo.Text = licvm.MobileNo;
+                    txtEmailID.Text = licvm.EmailID;
+                    txtCompany.Text = licvm.CompanyName;
+                    txtLicenseCount.Text = Convert.ToString(licvm.SystemCount);
                     txtActivationKey.IsEnabled = false;
                     btnValidate.IsEnabled = false;
                     _Reg = new RegistrationMaster();
-                    _Reg.Name = Name;
-                    _Reg.MobileNo = MobileNo;
-                    _Reg.EmailID = EmailID;
-                    _Reg.Key = _Key;
-                    _Reg.MacAddress = MacAddress;
-                    _Reg.SystemName = SystemName;
+                    _Reg.Name = licvm.Name;
+                    _Reg.MobileNo = licvm.MobileNo;
+                    _Reg.EmailID = licvm.EmailID;
+                    _Reg.Key = licvm.Key;
+                    _Reg.MacAddress = licvm.MacAddress;
+                    _Reg.SystemName = licvm.SystemName;
+                    _Reg.CompanyName = licvm.CompanyName;
+                    _Reg.LicenseCount = licvm.SystemCount;
                     _Reg.IsActive = true;
                     _Reg.CreatedBy = 1;
                     _Reg.CreatedDtTm = DateTime.Now;
@@ -85,19 +90,39 @@ namespace MasterRecon.Forms
             _Reg.ActivatedDtTm = DateTime.Now;
             _Reg.ActivatedTillDtTm = txtValidUpto.SelectedDate;
             _Reg.IsActivated = true;
+            _Reg.CompanyName = licvm.CompanyName;
+            _Reg.LicenseCount = licvm.SystemCount;
             db.RegistrationMasters.Add(_Reg);
             db.SaveChanges();
+            licvm.ActivationKey = _Reg.ActivationKey;
+            licvm.ActivationDtTm = _Reg.ActivatedDtTm;
+            licvm.ActivationUptoDtTm = _Reg.ActivatedTillDtTm;
+            licvm.IsActivated = _Reg.IsActivated;
+            foreach (var item in licvm.ServiceList)
+            {
+                RegistrationWiseSearchTypes reg = new RegistrationWiseSearchTypes();
+                reg.CreatedBy = 1;
+                reg.CreatedDtTm = DateTime.Now;
+                reg.IsActive = true;
+                reg.IsActivated = (item.IsRequired == true) ? true : false;
+                reg.RegistrationID = _Reg.RegistrationID;
+                reg.IsRequired = item.IsRequired;
+                reg.SearchTypeID = item.ServiceID;
+                db.RegistrationWiseSearchTypes.Add(reg);
+                db.SaveChanges();
+                item.IsActivated = (item.IsRequired == true) ? true : false;
+            }
             MessageBox.Show("Registration has been done;");
-            MailData(_Reg);
+            MailData(licvm, _Reg.RegistrationID);
             Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
             MainFrame.Navigate(new System.Uri("Forms/Home.xaml", UriKind.RelativeOrAbsolute));
         }
 
-        private void MailData(RegistrationMaster _Reg)
+        private void MailData(LicenseViewModel _Reg, Int64 RegistrationID)
         {
-            string Value = Utility.Utility.Encrypt(_Reg.IsActivated + "|" + _Reg.ActivationKey + "|" + _Reg.ActivatedDtTm + "|" + _Reg.ActivatedTillDtTm + "|" + _Reg.Name + "|" + _Reg.MobileNo + "|" + _Reg.EmailID + "|" + _Reg.Key + "|" + _Reg.MacAddress + "|" + _Reg.SystemName);
+            string Value = Utility.Utility.Encrypt(Newtonsoft.Json.JsonConvert.SerializeObject(_Reg));
             var curDir = Directory.GetCurrentDirectory();
-            var curPath = curDir + "\\lic" + _Reg.RegistrationID.ToString() + ".txt";
+            var curPath = curDir + "\\lic" + RegistrationID.ToString() + ".txt";
             var exsitpath = curPath.Replace(".txt", ".rec");
             //if (File.Exists(exsitpath))
             //{

@@ -4,7 +4,7 @@ namespace MasterRecon.Database
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
-using MasterRecon.Model;
+    using MasterRecon.Model;
 
     public partial class DbModel : DbContext
     {
@@ -12,7 +12,8 @@ using MasterRecon.Model;
             : base("name=DbModel")
         {
         }
-
+        public DbSet<SearchTypeMaster> SearchTypeMasters { get; set; }
+        public DbSet<RegistrationWiseSearchTypes> RegistrationWiseSearchTypes { get; set; }
         public DbSet<RegistrationMaster> RegistrationMasters { get; set; }
         public DbSet<PageLogMaster> PageLogMasters { get; set; }
         public DbSet<PageActionLogMaster> PageActionLogMasters { get; set; }

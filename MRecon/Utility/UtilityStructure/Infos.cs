@@ -8,6 +8,6 @@ namespace Utility.UtilityStructure
 {
     public static class Infos
     {
-       public static string Key = "85KSFT89988589KI";
+       public static string Key = "1QAZW2SXED3CRFV4BGT5NH6YM7JU8LKI";
     }
 }

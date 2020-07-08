@@ -1,5 +1,6 @@
 ﻿using MRecon.Database;
 using MRecon.Model;
+using MRecon.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,6 @@ namespace MRecon.Forms
         public Activation()
         {
             InitializeComponent();
-
         }
 
         private void btnActivate_Click(object sender, RoutedEventArgs e)
@@ -38,37 +38,61 @@ namespace MRecon.Forms
                 AppUtility.PageEventLogger(PageLogID, "Activation Button", 1, "Activation Button Click", "Normal");
                 txtActivationKey.SelectAll();
                 string Value = Utility.Utility.Decrypt(txtActivationKey.Selection.Text);
-                string[] infos = Value.Split('|');
-                string SystemName = infos[9];
-                string MacAddress = infos[8];
-                string MobileNo = infos[5];
-                string EmailID = infos[6];
-                string Name = infos[4];
-                string _Key = infos[7];
-                string ActivationKey = infos[1];
-                if (infos.Count() == 10)
+                LicenseViewModel licvm = Newtonsoft.Json.JsonConvert.DeserializeObject<LicenseViewModel>(Value);
+
+                if (licvm != null)
                 {
-                    var _ExistReg = db.RegistrationMasters.Where(w => w.SystemName == SystemName && w.MacAddress == MacAddress && w.MobileNo == MobileNo && w.EmailID == EmailID && w.Name == Name && w.Key == _Key).FirstOrDefault();
+                    var _ExistReg = db.RegistrationMasters.Where(w => w.Key == licvm.Key && w.IsActive == true).FirstOrDefault();
                     if (_ExistReg != null)
                     {
-                        if (Convert.ToBoolean(infos[0]))
+                        if (Convert.ToBoolean(licvm.IsActivated) && licvm.SystemName == System.Net.Dns.GetHostName())
                         {
-                            _ExistReg.ActivationKey = ActivationKey;
+                            _ExistReg.ActivationKey = licvm.ActivationKey;
                             // Page Event Logger
                             AppUtility.PageEventLogger(PageLogID, "Activation Button", 1, "Product Activated", "Normal");
-                            MessageBox.Show("Your product has been activated till " + infos[1]);
-                            AppUtility.AdminUserCreateAndRoleMapping(_ExistReg);
+                            MessageBox.Show("Your product has been activated till " + licvm.ActivationUptoDtTm);
+                            AppUtility.AdminUserCreateAndRoleMapping(_ExistReg, licvm);
                             // Page Event Logger
                             AppUtility.PageEventLogger(PageLogID, "Activation Button", 1, "Moved To Super Admin Password Change", "Normal");
                             Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
                             MainFrame.Navigate(new System.Uri("Forms/SuperAdminPasswordChange.xaml", UriKind.RelativeOrAbsolute));
+                        }
+                        else if (Convert.ToBoolean(licvm.IsActivated) && (_ExistReg.LicenseCount - _ExistReg.LicenseUsed) > 0)
+                        {
+                            AppUtility.PageEventLogger(PageLogID, "Activation Button", 1, "Register Other Systems", "Normal");
+                            bool IsRegisterd = AppUtility.AdditionSystemRegistration(_ExistReg, licvm);
+                            if (IsRegisterd)
+                            {
+                                MessageBox.Show("This device is registered successfully");
+                                LoginWindow frm = new LoginWindow();
+                                this.Cursor = Cursors.Arrow;
+                                frm.Show();
+                                Application.Current.MainWindow.Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Please contact the administrator.");
+                            }
                         }
                         else
                         {
                             // Page Event Logger
                             AppUtility.PageEventLogger(PageLogID, "Activation Button", 1, "Mail Process Triggerred Again", "Normal");
                             MessageBox.Show("Your product has not been activated. Please send mail again");
-                            AppUtility.SendRegistrationMail(_ExistReg);
+
+
+                            LicenseViewModel licvmn = new LicenseViewModel();
+                            licvmn.ServiceList = new List<Service>();
+                            licvmn.ServiceList.AddRange(db.RegistrationWiseSearchTypes.Join(db.SearchTypeMasters, x => x.SearchTypeID, y => y.SearchTypeID, (x, y) => new { x, y.SearchName }).Where(w => w.x.RegistrationID == _ExistReg.RegistrationID).Select(s => new Service() { ServiceID = s.x.SearchTypeID, IsRequired = s.x.IsRequired, IsActivated = false }).ToList());
+                            licvmn.CompanyName = _ExistReg.CompanyName;
+                            licvmn.EmailID = _ExistReg.EmailID;
+                            licvmn.Key = _ExistReg.Key;
+                            licvmn.MacAddress = _ExistReg.MacAddress;
+                            licvmn.MobileNo = _ExistReg.MobileNo;
+                            licvmn.Name = _ExistReg.MobileNo;
+                            licvmn.SystemCount = _ExistReg.LicenseCount;
+                            licvmn.SystemName = _ExistReg.SystemName;
+                            AppUtility.SendRegistrationMail(licvmn);
                         }
                     }
                 }

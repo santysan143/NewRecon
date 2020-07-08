@@ -1,4 +1,5 @@
 ﻿using MRecon.Database;
+using MRecon.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,7 +16,7 @@ namespace MRecon.Model
 {
     public static class AppUtility
     {
-
+       static Int64 RegistrationID;
         public static string GetMachineData(string Address)
         {
             ManagementClass MC = new ManagementClass("Win32_NetworkAdapter");
@@ -38,20 +39,109 @@ namespace MRecon.Model
 
         }
 
-        public static Int64 AdminUserCreateAndRoleMapping(RegistrationMaster _Reg)
+        public static bool AdditionSystemRegistration(RegistrationMaster _Reg, LicenseViewModel licvm)
+        {
+            try
+            {
+                DbModel db = new DbModel();
+                string MacAddress = GetMachineData("MacAddress");
+                string SystemName = System.Net.Dns.GetHostName();
+                var _ExistLicense = db.LicenseKeys.Where(w => w.RegistrationID == _Reg.RegistrationID && w.DesktopName == SystemName && w.MacAddress == MacAddress).ToList();
+                if (_ExistLicense.Count == 0)
+                {
+                    var _ExistReg = db.RegistrationMasters.Where(w => w.RegistrationID == _Reg.RegistrationID).ToList();
+                    foreach (var item in _ExistReg)
+                    {
+                        RegistrationID = item.RegistrationID;
+                        if (licvm.IsActivated == true)
+                        {
+                            item.LicenseUsed = item.LicenseUsed + 1;
+                            item.ModifiedBy = _Reg.CreatedBy;
+                            item.ModifiedDtTm = DateTime.Now;
+                            db.Entry(item).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        break;
+                    }
+                    LicenseKeys key = new LicenseKeys();
+                    key.CreatedBy = _Reg.CreatedBy;
+                    key.CreatedDtTm = DateTime.Now;
+                    key.DesktopName = SystemName;
+                    key.IpAddress = "";
+                    key.IsActive = true;
+                    key.LicenseKeyCode = licvm.ActivationKey;
+                    key.LicenseKeySequence = 1;
+                    key.MacAddress = MacAddress;
+                    key.RegistrationDtTm = licvm.ActivationDtTm;
+                    key.RegistrationID = RegistrationID;
+                    key.ValidUptoDtTm = licvm.ActivationUptoDtTm;
+                    db.LicenseKeys.Add(key);
+                    db.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public static Int64 AdminUserCreateAndRoleMapping(RegistrationMaster _Reg, LicenseViewModel licvm)
         {
             DbModel db = new DbModel();
+
+            //Updating RegistraionDetails
             var _ExistReg = db.RegistrationMasters.Where(w => w.RegistrationID == _Reg.RegistrationID).ToList();
             foreach (var item in _ExistReg)
             {
-                item.IsActivated = true;
-                item.ActivationKey = _Reg.ActivationKey;
-                item.ModifiedBy = _Reg.CreatedBy;
-                item.ModifiedDtTm = DateTime.Now;
-                db.Entry(item).State = EntityState.Modified;
-                db.SaveChanges();
+                RegistrationID = item.RegistrationID;
+                if (licvm.IsActivated == true)
+                {
+                    item.IsActivated = licvm.IsActivated;
+                    item.ActivationKey = licvm.ActivationKey;
+                    item.ActivatedDtTm = licvm.ActivationDtTm;
+                    item.ActivatedTillDtTm = licvm.ActivationUptoDtTm;
+                    item.LicenseCount = licvm.SystemCount;
+                    item.LicenseUsed = 1;
+                    item.ModifiedBy = _Reg.CreatedBy;
+                    item.ModifiedDtTm = DateTime.Now;
+                    db.Entry(item).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
                 break;
             }
+
+            foreach (var item in licvm.ServiceList)
+            {
+                var serviceupdate = db.RegistrationWiseSearchTypes.Where(w => w.RegistrationID == _Reg.RegistrationID && w.SearchTypeID == item.ServiceID).First();
+                serviceupdate.IsActivated = item.IsActivated;
+                serviceupdate.ActivatedDtTm = licvm.ActivationDtTm;
+                db.Entry(serviceupdate).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            //License Info Update
+            string MacAddress = GetMachineData("MacAddress");
+            string SystemName = System.Net.Dns.GetHostName();
+            var _ExistLicense = db.LicenseKeys.Where(w => w.RegistrationID == _Reg.RegistrationID && w.DesktopName == SystemName && w.MacAddress == MacAddress).ToList();
+            if (_ExistLicense.Count == 0)
+            {
+                LicenseKeys key = new LicenseKeys();
+                key.CreatedBy = 1;
+                key.CreatedDtTm = DateTime.Now;
+                key.DesktopName = licvm.SystemName;
+                key.IpAddress = "";
+                key.IsActive = true;
+                key.LicenseKeyCode = licvm.ActivationKey;
+                key.LicenseKeySequence = 1;
+                key.MacAddress = licvm.MacAddress;
+                key.RegistrationDtTm = licvm.ActivationDtTm;
+                key.RegistrationID = RegistrationID;
+                key.ValidUptoDtTm = licvm.ActivationUptoDtTm;
+                db.LicenseKeys.Add(key);
+                db.SaveChanges();
+            }
+
             RoleMaster role = new RoleMaster();
             var _ExistRole = db.RoleMasters.Where(w => w.RoleName == "Super Admin").ToList();
             if (_ExistRole.Count > 0)
@@ -101,6 +191,7 @@ namespace MRecon.Model
                 user.Password = _Reg.MobileNo;
                 user.RoleID = role.RoleID;
                 user.UserName = _Reg.MobileNo;
+                user.ConfirmPassword = _Reg.MobileNo;
                 db.UserMasters.Add(user);
                 db.SaveChanges();
             }
@@ -166,10 +257,11 @@ namespace MRecon.Model
 
 
 
-        public static void SendRegistrationMail(RegistrationMaster _Reg)
+        public static void SendRegistrationMail(LicenseViewModel _Reg)
         {
+            string jsonValue = Newtonsoft.Json.JsonConvert.SerializeObject(_Reg);
             //Key Generation
-            string Value = Utility.Utility.Encrypt(_Reg.Name + "|" + _Reg.MobileNo + "|" + _Reg.EmailID + "|" + _Reg.Key + "|" + _Reg.MacAddress + "|" + _Reg.SystemName);
+            string Value = Utility.Utility.Encrypt(jsonValue);
             var curDir = Directory.GetCurrentDirectory();
             var curPath = curDir + "\\lic.txt";
             var exsitpath = curPath.Replace(".txt", ".rec");

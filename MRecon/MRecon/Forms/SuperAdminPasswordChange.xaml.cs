@@ -26,7 +26,7 @@ namespace MRecon.Forms
         Int64 PageLogID;
         public SuperAdminPasswordChange()
         {
-            InitializeComponent();           
+            InitializeComponent();
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
@@ -39,16 +39,14 @@ namespace MRecon.Forms
                 UserMaster user = db.UserMasters.Where(w => w.RoleID == 1).FirstOrDefault();
                 user.UserName = txtUserID.Text;
                 user.Password = txtPassword.Password;
+                user.ConfirmPassword = txtConfirmPassword.Password;
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Submit", 1, "User Name and Password Setup Done", "Normal");
                 MessageBox.Show("User Successfully created. Please remember your credentials for future.");
-                //Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
-                //MainFrame.Navigate(new System.Uri("Forms/Login.xaml", UriKind.RelativeOrAbsolute));
-                LoginWindow login = new LoginWindow();
-                login.Show();
-                Application.Current.MainWindow.Close();
+                Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
+                MainFrame.Navigate(new System.Uri("Forms/EmailConfiguration.xaml", UriKind.RelativeOrAbsolute));                
             }
             catch (Exception ex)
             {
@@ -57,7 +55,7 @@ namespace MRecon.Forms
                 MessageBox.Show("Their is some issue please login with mobileno as user name and password.");
             }
         }
-        
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             //Page Logger

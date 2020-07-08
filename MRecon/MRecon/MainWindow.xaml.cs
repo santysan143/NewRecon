@@ -41,93 +41,33 @@ namespace MRecon
             string SystemName = System.Net.Dns.GetHostName();
             string MacAddress = AppUtility.GetMachineData("MACAddress");
             //Initiliazing Frame
-            var items = db.RegistrationMasters.Where(x => x.SystemName == SystemName).ToList();
+            var items = db.RegistrationMasters.Where(x => x.IsActive == true).ToList();
             foreach (var dd in items)
             {
-                if (dd.IsActivated == true && dd.IsSentForRegistration == true)
+                if (dd.IsActivated == true && dd.IsSentForRegistration == true && dd.IsActive == true && DateTime.Now.AddDays(-1) < dd.ActivatedTillDtTm)
                 {
+                    var _ExistReg = db.LicenseKeys.Where(w => w.RegistrationID == dd.RegistrationID && w.DesktopName == SystemName).ToList();
+
+                    foreach (var item in _ExistReg)
+                    {
+                        AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Sent To Login Page", "Normal");
+                        LoginWindow frm = new LoginWindow();
+                        this.Cursor = Cursors.Arrow;
+                        frm.Show();
+                        this.Close();
+                        break;
+                    }
                     // Page Event Logger
-                    AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Sent To Login Page", "Normal");
-                    LoginWindow frm = new LoginWindow();
-                    this.Cursor = Cursors.Arrow;
-                    frm.Show();
-                    this.Close();
-                    break;
+                   
                 }
-                else if (dd.IsActivated == false && dd.IsSentForRegistration == true)
-                {
-                    RegistrationMenu.Visibility = Visibility.Collapsed;
-                    ActivationMenu.Visibility = Visibility.Visible;
-                    break;
-                }
+                //else if (DateTime.Now.AddDays(-1) > dd.ActivatedTillDtTm)
+                //{
+
+                //}
             }
             this.Cursor = Cursors.Arrow;
         }
-        private void RegistrationMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/Registration.xaml",
-                        UriKind.RelativeOrAbsolute));
-        }
 
-        private void ActivationMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/Activation.xaml",
-                       UriKind.RelativeOrAbsolute));
-        }
-
-        private void CreateRoleSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/CreateRole.xaml",
-                        UriKind.RelativeOrAbsolute));
-        }
-
-        private void RoleMappingSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/RoleMapping.xaml",
-                                  UriKind.RelativeOrAbsolute));
-        }
-
-        private void CreateUserSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/CreateUser.xaml",
-                                 UriKind.RelativeOrAbsolute));
-        }
-
-        private void UserMappingSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/UserMapping.xaml",
-                                UriKind.RelativeOrAbsolute));
-        }
-
-        private void CreditCardSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/CreditCard.xaml",
-                               UriKind.RelativeOrAbsolute));
-        }
-
-        private void MobileNoSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/MobileNo.xaml",
-                             UriKind.RelativeOrAbsolute));
-        }
-
-        private void PanCardSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/PanCard.xaml",
-                            UriKind.RelativeOrAbsolute));
-        }
-
-        private void AdhaarCardSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/AdhaarCard.xaml",
-                           UriKind.RelativeOrAbsolute));
-        }
-
-        private void ReviewScanSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new System.Uri("Forms/ReviewScan.xaml",
-                         UriKind.RelativeOrAbsolute));
-        }
 
 
     }

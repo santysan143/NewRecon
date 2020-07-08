@@ -12,7 +12,7 @@ namespace MRecon.Model
         [Key]
         public Int64 LicenseKeyID { get; set; }
         [Required]
-        public Int64 LicenseGenerationID { get; set; }
+        public Int64 RegistrationID { get; set; }
         [Required]
         public string LicenseKeyCode { get; set; }
         [Required]
