@@ -12,7 +12,7 @@ namespace MRecon.AbstractFactory
         List<RoleMaster> GetRoles();
         Int64 AddRole(RoleMaster role);
         Int64 UpdateRole(RoleMaster role);
-        Int64 DeleteRole(Int64 roleid);
-        Int64 DeactivateRole(Int64 roleid);
+        bool DeleteRole(RoleMaster role);
+        bool DeactivateRole(Int64 roleid);
     }
 }
