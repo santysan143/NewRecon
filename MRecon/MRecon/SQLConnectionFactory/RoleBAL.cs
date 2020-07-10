@@ -3,6 +3,7 @@ using MRecon.Database;
 using MRecon.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,12 @@ namespace MRecon.SQLConnectionFactory
     {
         DbModel db;
         public RoleBAL()
-         {
-             db = new DbModel();
-         }
+        {
+            db = new DbModel();
+        }
         List<RoleMaster> IRole.GetRoles()
         {
-           return db.RoleMasters.ToList();
+            return db.RoleMasters.ToList();
         }
 
         long IRole.AddRole(RoleMaster role)
@@ -30,17 +31,25 @@ namespace MRecon.SQLConnectionFactory
 
         long IRole.UpdateRole(RoleMaster role)
         {
-            throw new NotImplementedException();
+            db.Entry(role).State = EntityState.Modified;
+            db.SaveChanges();
+            return role.RoleID;
         }
 
-        long IRole.DeleteRole(long roleid)
+        bool IRole.DeleteRole(RoleMaster role)
         {
-            throw new NotImplementedException();
+            db.RoleMasters.Remove(role);
+            db.SaveChanges();
+            return true;
         }
 
-        long IRole.DeactivateRole(long roleid)
+        bool IRole.DeactivateRole(long roleid)
         {
-            throw new NotImplementedException();
+            var role = db.RoleMasters.Where(w => w.RoleID == roleid).FirstOrDefault();
+            role.IsActive = false;
+            db.Entry(role).State = EntityState.Modified;
+            db.SaveChanges();
+            return true;
         }
     }
 }

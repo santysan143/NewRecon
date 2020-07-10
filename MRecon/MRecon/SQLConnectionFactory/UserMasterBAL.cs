@@ -40,11 +40,35 @@ namespace MRecon.SQLConnectionFactory
             db.SaveChanges();
             return true;
         }
-
-
-        bool IUserMaster.UpdateAdminUser(UserMaster user)
+        
+        long IUserMaster.AddUser(UserMaster user)
         {
-            throw new NotImplementedException();
+            db.UserMasters.Add(user);
+            db.SaveChanges();
+            return user.UserID;
+        }
+
+        long IUserMaster.UpdateUser(UserMaster user)
+        {
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+            return user.RoleID;
+        }
+
+        bool IUserMaster.DeleteUser(UserMaster user)
+        {
+            db.UserMasters.Remove(user);
+            db.SaveChanges();
+            return true;
+        }
+
+        bool IUserMaster.DeactivateUser(long UserID)
+        {
+            var role = db.UserMasters.Where(w => w.UserID == UserID).FirstOrDefault();
+            role.IsActive = false;
+            db.Entry(role).State = EntityState.Modified;
+            db.SaveChanges();
+            return true;
         }
     }
 }

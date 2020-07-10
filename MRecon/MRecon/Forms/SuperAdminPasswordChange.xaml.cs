@@ -35,8 +35,7 @@ namespace MRecon.Forms
             {
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Submit", 1, "User Name and Password Setup", "Normal");
-                DbModel db = new DbModel();
-                //bool IsDone=MainWindow._FactoryConnection.
+                bool IsDone = MainWindow._FactoryConnection.UserMaster().UpdateAdminUser(txtUserID.Text, txtPassword.Password, txtConfirmPassword.Password);
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Submit", 1, "User Name and Password Setup Done", "Normal");
                 MessageBox.Show("User Successfully created. Please remember your credentials for future.");
