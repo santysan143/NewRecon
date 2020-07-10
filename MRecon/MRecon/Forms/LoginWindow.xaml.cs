@@ -1,6 +1,9 @@
-﻿using MRecon.Database;
+﻿using MRecon.AbstractFactory;
+using MRecon.Database;
+using MRecon.SQLConnectionFactory;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,16 +23,20 @@ namespace MRecon.Forms
     /// </summary>
     public partial class LoginWindow : Window
     {
-        DbModel db = new DbModel();
+        static string ConnectionType = ConfigurationManager.AppSettings.Get("ConnectionType");
+        public static IAbstractFactory _FactoryConnection;
         Int64 UserID;
         public LoginWindow()
         {
             InitializeComponent();
+            if (ConnectionType == "SQL")
+                _FactoryConnection = new SQLConcreteFactory();
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            var LoginInfo = db.UserMasters.Where(w => w.UserName == txtUserName.Text && w.Password == txtPassword.Password && w.IsActive == true).ToList();
+            
+            var LoginInfo =_FactoryConnection.UserMaster().GetUsers().Where(w => w.UserName == txtUserName.Text && w.Password == txtPassword.Password && w.IsActive == true).ToList();
             bool isLogin = false;
             
             foreach (var item in LoginInfo)
@@ -49,6 +56,11 @@ namespace MRecon.Forms
             {
                 MessageBox.Show("Please check your username and password.");
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Windows[1].Height = 200;
         }
     }
 }

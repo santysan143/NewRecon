@@ -54,5 +54,10 @@ namespace MRecon.Forms
             login.Show();
             Application.Current.MainWindow.Close();
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Windows[0].Height = this.Height;
+        }
     }
 }

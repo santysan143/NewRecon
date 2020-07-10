@@ -1,7 +1,7 @@
 ﻿<Window x:Class="MRecon.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Recon" Height="150" MaxHeight="500" Width="800" ResizeMode="CanMinimize" FontFamily="Arial" Background="LightGray" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="Recon" Height="150" Width="800" ResizeMode="CanMinimize" FontFamily="Arial" Background="LightGray" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top">
             <Frame Name="MainFrame" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Source="Forms/Registration.xaml" NavigationUIVisibility="Hidden"></Frame>

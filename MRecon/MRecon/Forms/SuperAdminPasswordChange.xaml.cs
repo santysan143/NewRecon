@@ -36,17 +36,12 @@ namespace MRecon.Forms
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Submit", 1, "User Name and Password Setup", "Normal");
                 DbModel db = new DbModel();
-                UserMaster user = db.UserMasters.Where(w => w.RoleID == 1).FirstOrDefault();
-                user.UserName = txtUserID.Text;
-                user.Password = txtPassword.Password;
-                user.ConfirmPassword = txtConfirmPassword.Password;
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
+                //bool IsDone=MainWindow._FactoryConnection.
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Submit", 1, "User Name and Password Setup Done", "Normal");
                 MessageBox.Show("User Successfully created. Please remember your credentials for future.");
                 Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
-                MainFrame.Navigate(new System.Uri("Forms/EmailConfiguration.xaml", UriKind.RelativeOrAbsolute));                
+                MainFrame.Navigate(new System.Uri("Forms/EmailConfiguration.xaml", UriKind.RelativeOrAbsolute));
             }
             catch (Exception ex)
             {
@@ -62,6 +57,14 @@ namespace MRecon.Forms
             PageLogID = AppUtility.PageLogger(9, 1);
             // Page Event Logger
             AppUtility.PageEventLogger(PageLogID, "Page_Loaded", 1, "Form Load", "Normal");
+            DbModel db = new DbModel();
+            var user = db.UserMasters.Where(w => w.RoleID == 1 && w.UserName != w.Password).ToList();
+            foreach (var item in user)
+            {
+                Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
+                MainFrame.Navigate(new System.Uri("Forms/EmailConfiguration.xaml", UriKind.RelativeOrAbsolute));
+                break;
+            }
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

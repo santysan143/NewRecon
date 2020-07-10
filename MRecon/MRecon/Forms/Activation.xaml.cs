@@ -23,7 +23,6 @@ namespace MRecon.Forms
     /// </summary>
     public partial class Activation : Page
     {
-        DbModel db = new DbModel();
         Int64 PageLogID;
         public Activation()
         {
@@ -32,6 +31,7 @@ namespace MRecon.Forms
 
         private void btnActivate_Click(object sender, RoutedEventArgs e)
         {
+            Application.Current.Windows[0].Height = this.Height;
             try
             {
                 // Page Event Logger
@@ -42,7 +42,7 @@ namespace MRecon.Forms
 
                 if (licvm != null)
                 {
-                    var _ExistReg = db.RegistrationMasters.Where(w => w.Key == licvm.Key && w.IsActive == true).FirstOrDefault();
+                    var _ExistReg = MainWindow._FactoryConnection.Registration().GetSingleRegistraionDetail(licvm.Key);
                     if (_ExistReg != null)
                     {
                         if (Convert.ToBoolean(licvm.IsActivated) && licvm.SystemName == System.Net.Dns.GetHostName())
@@ -83,7 +83,7 @@ namespace MRecon.Forms
 
                             LicenseViewModel licvmn = new LicenseViewModel();
                             licvmn.ServiceList = new List<Service>();
-                            licvmn.ServiceList.AddRange(db.RegistrationWiseSearchTypes.Join(db.SearchTypeMasters, x => x.SearchTypeID, y => y.SearchTypeID, (x, y) => new { x, y.SearchName }).Where(w => w.x.RegistrationID == _ExistReg.RegistrationID).Select(s => new Service() { ServiceID = s.x.SearchTypeID, IsRequired = s.x.IsRequired, IsActivated = false }).ToList());
+                            licvmn.ServiceList.AddRange(MainWindow._FactoryConnection.SearchTypeMasters().SearchTypeList(_ExistReg.RegistrationID));
                             licvmn.CompanyName = _ExistReg.CompanyName;
                             licvmn.EmailID = _ExistReg.EmailID;
                             licvmn.Key = _ExistReg.Key;

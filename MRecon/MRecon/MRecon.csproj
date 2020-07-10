@@ -51,6 +51,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -60,12 +63,19 @@
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -83,6 +93,45 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AbstractFactory\IRole.cs" />
+    <Compile Include="AbstractFactory\IUserMaster.cs" />
+    <Compile Include="Forms\EmailConfiguration.xaml.cs">
+      <DependentUpon>EmailConfiguration.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AbstractFactory\ILicenseKeys.cs" />
+    <Compile Include="AbstractFactory\IRegistration.cs" />
+    <Compile Include="AbstractFactory\ILogger.cs" />
+    <Compile Include="AbstractFactory\IAbstractFactory.cs" />
+    <Compile Include="AbstractFactory\ISearchTypeMasters.cs" />
+    <Compile Include="Migrations\202007070915235_mig54.cs" />
+    <Compile Include="Migrations\202007070915235_mig54.designer.cs">
+      <DependentUpon>202007070915235_mig54.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007071041488_mig55.cs" />
+    <Compile Include="Migrations\202007071041488_mig55.designer.cs">
+      <DependentUpon>202007071041488_mig55.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007071044315_mig56.cs" />
+    <Compile Include="Migrations\202007071044315_mig56.designer.cs">
+      <DependentUpon>202007071044315_mig56.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007071229258_mig57.cs" />
+    <Compile Include="Migrations\202007071229258_mig57.designer.cs">
+      <DependentUpon>202007071229258_mig57.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007080925305_mig58.cs" />
+    <Compile Include="Migrations\202007080925305_mig58.designer.cs">
+      <DependentUpon>202007080925305_mig58.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\EmailConfigurationMaster.cs" />
+    <Compile Include="Model\RegistrationWiseSearchTypes.cs" />
+    <Compile Include="SQLConnectionFactory\LicenseKeysBAL.cs" />
+    <Compile Include="SQLConnectionFactory\LoggerBAL.cs" />
+    <Compile Include="SQLConnectionFactory\RegistrationBAL.cs" />
+    <Compile Include="SQLConnectionFactory\SearchTypeMastersBAL.cs" />
+    <Compile Include="SQLConnectionFactory\SQLConcreteFactory.cs" />
+    <Compile Include="SQLConnectionFactory\UserMasterBAL.cs" />
+    <Compile Include="ViewModel\LicenseViewModel.cs" />
     <Page Include="Forms\Activation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,6 +152,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Forms\EmailConfiguration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\EmailConfigurationMaster.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Home.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\MasterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\MobileNo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -122,6 +191,10 @@
     <Page Include="Forms\RoleMapping.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\SuperAdminPasswordChange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\UserMapping.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -151,6 +224,18 @@
     <Compile Include="Forms\CreditCard.xaml.cs">
       <DependentUpon>CreditCard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EmailConfigurationMaster.xaml.cs">
+      <DependentUpon>EmailConfigurationMaster.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Home.xaml.cs">
+      <DependentUpon>Home.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MasterWindow.xaml.cs">
+      <DependentUpon>MasterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MobileNo.xaml.cs">
       <DependentUpon>MobileNo.xaml</DependentUpon>
     </Compile>
@@ -166,6 +251,9 @@
     <Compile Include="Forms\RoleMapping.xaml.cs">
       <DependentUpon>RoleMapping.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SuperAdminPasswordChange.xaml.cs">
+      <DependentUpon>SuperAdminPasswordChange.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UserMapping.xaml.cs">
       <DependentUpon>UserMapping.xaml</DependentUpon>
     </Compile>
@@ -178,6 +266,18 @@
     <Compile Include="Migrations\202007041221296_mig1.cs" />
     <Compile Include="Migrations\202007041221296_mig1.designer.cs">
       <DependentUpon>202007041221296_mig1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007051216313_Mig51.cs" />
+    <Compile Include="Migrations\202007051216313_Mig51.designer.cs">
+      <DependentUpon>202007051216313_Mig51.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007060810259_mig52.cs" />
+    <Compile Include="Migrations\202007060810259_mig52.designer.cs">
+      <DependentUpon>202007060810259_mig52.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007060825056_mig53.cs" />
+    <Compile Include="Migrations\202007060825056_mig53.designer.cs">
+      <DependentUpon>202007060825056_mig53.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ClientMaster.cs" />
@@ -195,6 +295,7 @@
     <Compile Include="Model\SearchTransactionStatusLogs.cs" />
     <Compile Include="Model\SearchTypeMaster.cs" />
     <Compile Include="Model\UserMaster.cs" />
+    <Compile Include="Model\AppUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -211,10 +312,37 @@
     <EmbeddedResource Include="Migrations\202007041221296_mig1.resx">
       <DependentUpon>202007041221296_mig1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007051216313_Mig51.resx">
+      <DependentUpon>202007051216313_Mig51.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007060810259_mig52.resx">
+      <DependentUpon>202007060810259_mig52.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007060825056_mig53.resx">
+      <DependentUpon>202007060825056_mig53.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007070915235_mig54.resx">
+      <DependentUpon>202007070915235_mig54.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007071041488_mig55.resx">
+      <DependentUpon>202007071041488_mig55.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007071044315_mig56.resx">
+      <DependentUpon>202007071044315_mig56.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007071229258_mig57.resx">
+      <DependentUpon>202007071229258_mig57.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007080925305_mig58.resx">
+      <DependentUpon>202007080925305_mig58.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -239,6 +367,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Content\Image\Registration.png" />
+    <Resource Include="Content\Image\Login.png" />
     <Content Include="Database\MyDB.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -259,6 +388,17 @@
       <Project>{ac522d34-c5a5-4485-9e77-ffacebef1b18}</Project>
       <Name>Utility</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

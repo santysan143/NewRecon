@@ -47,14 +47,12 @@ namespace MRecon.Forms
                 PageLogID = AppUtility.PageLogger(1, 1);
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Form Load", "Normal");
-                //Initiliazing Frame
-
                 //Getting System Info
                 string SystemName = System.Net.Dns.GetHostName();
                 string MacAddress = AppUtility.GetMachineData("MACAddress");
                 //Validating Data
-                var items = db.RegistrationMasters.Where(x => x.IsActive == true).ToList();
-                SearchTypeList = db.SearchTypeMasters.Select(s => new Service() { IsActivated = false, IsRequired = false, ServiceID = s.SearchTypeID, ServiceName = s.SearchName }).ToList();
+                var items = MainWindow._FactoryConnection.Registration().GetRegistraionDetails();
+                SearchTypeList = MainWindow._FactoryConnection.SearchTypeMasters().SearchTypeList();
                 listBoxSeachType.ItemsSource = SearchTypeList;
                 string PageName = "Forms/Login.xaml";
                 foreach (var dd in items)
@@ -73,7 +71,7 @@ namespace MRecon.Forms
                         //Registration details to send
                         LicenseViewModel licvm = new LicenseViewModel();
                         licvm.ServiceList = new List<Service>();
-                        licvm.ServiceList.AddRange(db.RegistrationWiseSearchTypes.Join(db.SearchTypeMasters, x => x.SearchTypeID, y => y.SearchTypeID, (x, y) => new { x, y.SearchName }).Where(w => w.x.RegistrationID == dd.RegistrationID).Select(s => new Service() { ServiceID = s.x.SearchTypeID, IsRequired = s.x.IsRequired, IsActivated = false, ServiceName = s.SearchName }).ToList());
+                        licvm.ServiceList.AddRange(MainWindow._FactoryConnection.SearchTypeMasters().SearchTypeList(dd.RegistrationID));
                         licvm.CompanyName = dd.CompanyName;
                         licvm.EmailID = dd.EmailID;
                         licvm.Key = dd.Key;
@@ -90,7 +88,6 @@ namespace MRecon.Forms
                         break;
                     }
                 }
-
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Constructor", 1, "Form Load END", "Normal");
             }
@@ -108,7 +105,6 @@ namespace MRecon.Forms
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 RegistrationGrid.IsEnabled = false;
@@ -129,37 +125,11 @@ namespace MRecon.Forms
                 AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, "Registration Button Click Started", "Normal");
 
                 //Registeration of Client
-                RegistrationMaster _Reg = new RegistrationMaster();
-                _Reg.CompanyName = txtCompanyName.Text;
-                _Reg.LicenseCount = Convert.ToInt32(txtLicenseCount.Text);
-                _Reg.CreatedBy = 1;
-                _Reg.CreatedDtTm = DateTime.Now;
-                _Reg.EmailID = txtEmailID.Text;
-                _Reg.IsActive = true;
-                _Reg.Key = licvm.Key;
-                _Reg.SystemName = licvm.SystemName;
-                _Reg.MacAddress = licvm.MacAddress;
-                _Reg.Name = txtFullName.Text;
-                _Reg.MobileNo = txtMobileNumber.Text;
-                _Reg.IsSentForRegistration = true;
-                db.RegistrationMasters.Add(_Reg);
-                db.SaveChanges();
-                foreach (var item in SearchTypeList)
-                {
-                    RegistrationWiseSearchTypes reg = new RegistrationWiseSearchTypes();
-                    reg.CreatedBy = 1;
-                    reg.CreatedDtTm = DateTime.Now;
-                    reg.IsActive = true;
-                    reg.RegistrationID = _Reg.RegistrationID;
-                    reg.IsRequired = item.IsRequired;
-                    reg.SearchTypeID = item.ServiceID;
-                    db.RegistrationWiseSearchTypes.Add(reg);
-                    db.SaveChanges();
-                }
+                Int64 RegistrationID = MainWindow._FactoryConnection.Registration().FirstTimeRegistration(txtCompanyName.Text, Convert.ToInt32(txtLicenseCount.Text), txtEmailID.Text, licvm.Key, licvm.SystemName, licvm.MacAddress, txtFullName.Text, txtMobileNumber.Text, SearchTypeList);
 
                 // Page Event Logger
                 AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, "Registration Done", "Normal");
-                if (_Reg.RegistrationID > 0)
+                if (RegistrationID > 0)
                 {
                     // Page Event Logger
                     AppUtility.PageEventLogger(PageLogID, "Submit Button", 1, "Mailig Process Started", "Normal");
@@ -184,32 +154,15 @@ namespace MRecon.Forms
             }
         }
 
-
-
-
-
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             AppUtility.UpdatePageLogger(PageLogID);
         }
 
-        private void CheckBoxZone_Checked(object sender, RoutedEventArgs e)
-        {
-            CheckBox chkService = (CheckBox)sender;
-            Int64 ServiceID = (Int64)chkService.Tag;
-            SearchTypeList.Where(w => w.ServiceID == ServiceID).First().IsRequired = true;
-        }
-
-        private void CheckBoxZone_Unchecked(object sender, RoutedEventArgs e)
-        {
-            CheckBox chkService = (CheckBox)sender;
-            Int64 ServiceID = (Int64)chkService.Tag;
-            SearchTypeList.Where(w => w.ServiceID == ServiceID).First().IsRequired = false;
-        }
-
         private void btnActivate_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame MainFrame = AppUtility.FindChild<Frame>(Application.Current.MainWindow, "MainFrame");
+            MainFrame.Navigate(new System.Uri("Activation.xaml", UriKind.RelativeOrAbsolute));
         }
 
 
